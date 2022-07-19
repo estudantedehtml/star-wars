@@ -92,26 +92,26 @@ h3.subir {
 
 .scene .rocket {
     position: relative;
-    top: 0px;
+    top: 0vh;
     animation: animate .6s ease infinite;
     transition-duration: 2s;
 }
 
 .rocket.subir {
     position: relative;
-    top: -700px;
+    top: -100vh;
     animation: subir 1s ease-in normal;
 }
 
 @keyframes subir {
     0% {
-        top: 0px;
+        top: 0vh;
     }
     50% {
-        top: -100px;
+        top: -100vh;
     }
     100% {
-        top: -700px;
+        top: -700vh;
     }
 }
 
