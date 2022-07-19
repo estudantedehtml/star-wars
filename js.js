@@ -15,7 +15,7 @@ function stars() {
         star.style.animationDuration = duration + 's'
         scene.appendChild(star)
         i++
-        }
+    }
 }
 stars()
 let fecharbtn = document.getElementById('fecharbtn')
@@ -42,41 +42,67 @@ fecharbtn.addEventListener('click',fecharjanela)
 ///////////ANIMAÇÕES
 ////////////////////
 ///////////TRATANDO API
-'use stric';
-const pesquisar = async() => {
+'use strict';
+
+var btnSubmit = document.getElementById('pesquisar');
+
+const pesquisar = async () => {
     var formulario = document.querySelector('form')
-    formulario.addEventListener('submit', function(e){
+    const resultContentElement = document.getElementById('content')
+
+    formulario.addEventListener('submit', function(e) {
         e.preventDefault()
     })
-    ///refreshOff
-    /////API 1
+
     var numero = document.getElementById('number').value
-    if(numero == ""){
-    } else {
-    const pesquisar = `https://swapi.dev/api/people/${numero}`
-    const dados = await fetch(pesquisar).then()
-    var nome = document.getElementById('content')
-    ////API 2
-    const resultado = await dados.json() 
 
-    const pesquisar1 = `https://swapi.dev/api/planets/${numero}`
-    const dados1 = await fetch(pesquisar1).then()
-    fetch(pesquisar1).then(function(response) {
-        if (response.status == '404') {
-            nome.innerHTML = '<p>Posição não encontrada, Tente novamente</p>'
+    if (numero) {
+        startLoading();
+
+        const personEndpoint = `https://swapi.dev/api/people/${numero}`
+        const planetEndpoint = `https://swapi.dev/api/planets/${numero}`
+
+        const personPromise = await fetch(personEndpoint)
+        const planetPromise = await fetch(planetEndpoint)
+
+        clearResultContent()
+
+        if (personPromise.status !== 200) {
+            addTextInResultContent('Posição não encontrada, tente novamente.');
+        } else {
+            const person = await personPromise.json()
+            const planet = await planetPromise.json()
+
+            addTextInResultContent(`Nome: ${person.name}`);
+            addTextInResultContent(`Altura: ${person.height}`);
+            addTextInResultContent(`Idade: ${person.birth_year}`);
+
+            addTextInResultContent(`Planeta: ${planet.name}`);
+            addTextInResultContent(`Terreno: ${planet.terrain}`);
+            addTextInResultContent(`Gravidade: ${planet.gravity}`);
         }
-    }).catch(function(error) {
-        console.log('Catch error: ', error)
-    });
-    const resultado1 = await dados1.json()
-    nome.innerHTML = `<p>Nome: ${resultado.name}</p>`
-    nome.innerHTML += `<p>Altura: ${resultado.height}</p>`    
-    nome.innerHTML += `<p>Idade: ${resultado.birth_year}</p>`
-    nome.innerHTML += `<p>Planeta: ${resultado1.name}</p>`
-    nome.innerHTML += `<p>Terreno: ${resultado1.terrain}</p>`
-    nome.innerHTML += `<p>Gravidade: ${resultado1.gravity}</p>`
 
+        endLoading();
+    }
+
+    function addTextInResultContent(text) {
+        const newParagraph = document.createElement('p');
+        newParagraph.innerText = text;
+        resultContentElement.appendChild(newParagraph);
+    }
+
+    function clearResultContent() {
+        resultContentElement.innerHTML = '';
+    }
+
+    function startLoading() {
+        btnSubmit.innerHTML = "Carregando...";
+    }
+
+    function endLoading() {
+        btnSubmit.innerHTML = "Pesquisar";
+    }
 }
-}
-document.getElementById('pesquisar').addEventListener('click', pesquisar)
+
+btnSubmit.addEventListener('click', pesquisar)
 ///////////API
