@@ -1,6 +1,7 @@
 const ERROR_MESSAGES = {
     404: 'Posição não encontrada, tente novamente',
-    400: 'Requisição incorreta, tente novamente'
+    400: 'Requisição incorreta, tente novamente',
+    DEFAULT: 'Não foi possível realizar a consulta, tente novamente'
 }
 
 const btnSubmit = document.getElementById('pesquisar');
@@ -27,7 +28,8 @@ const pesquisar = async () => {
         clearResultContent()
 
         if (personPromise.status !== 200) {
-            addTextInResultContent(ERROR_MESSAGES[personPromise.status]);
+            const errorMessage = ERROR_MESSAGES.hasOwnProperty(personPromise.status) ? ERROR_MESSAGES[personPromise.status] : ERROR_MESSAGES.DEFAULT;
+            addTextInResultContent(errorMessage);
         } else {
             const person = await personPromise.json()
             const planet = await planetPromise.json()
