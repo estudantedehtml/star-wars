@@ -1,4 +1,4 @@
 # star-wars
 Tratando APis
 
-<a href = "https://estudantedehtml.github.io/star-wars/index.html">Site</a>
+<a href = "https://frontrocha.github.io/star-wars/">Site</a>
